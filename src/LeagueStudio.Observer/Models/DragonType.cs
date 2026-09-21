@@ -15,7 +15,8 @@ public enum DragonType
 public static class DragonTypeExtensions
 {
     public static string ToApiValue(this DragonType dragonType)
-        return DragonType switch
+    {
+        return dragonType switch
         {
             DragonType.Cloud => "cloud",
             DragonType.Infernal => "infernal",
@@ -25,9 +26,10 @@ public static class DragonTypeExtensions
             DragonType.Chemtech => "chemtech",
             DragonType.Elder => "elder",
             _ => throw new ArgumentOutOfRangeException(
-                nameOf(DragonType),
-                DragonType,
+                nameof(dragonType),
+                dragonType,
                 "Unknown dragon type cannot be sent."
-                )
+            )
         };
+    }
 }
