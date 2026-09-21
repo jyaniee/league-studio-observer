@@ -5,9 +5,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using LeagueStudio.Observer.Models;
 using LeagueStudio.Observer.Services.Server;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Threading;
 public partial class MainViewModel : ObservableValidator
 {
     private readonly IObserverApiClient _observerApiClient;
+    private readonly DispatcherTimer _connectionTimer;
 
     public IReadOnlyList<DragonType> DragonTypes { get; } =
         [
@@ -22,7 +24,22 @@ public partial class MainViewModel : ObservableValidator
     public MainViewModel(IObserverApiClient observerApiClient)
     {
         _observerApiClient = observerApiClient;
+
+        _connectionTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(2)
+        };
+
+        _connectionTimer.Tick += ConnectionTimer_Tick;
     }
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ApplyMatchInfoCommand))]
+    private bool hasCheckedConnection;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ApplyMatchInfoCommand))]
+    private bool isServerConnected;
 
     [ObservableProperty]
     [NotifyDataErrorInfo]
@@ -41,16 +58,30 @@ public partial class MainViewModel : ObservableValidator
     private string connectionStatus = "Disconnected";
 
     [ObservableProperty]
-    private string resultMessage = "입력한 경기 정보가 Server에 등록됩니다.";
+    private string resultMessage = "먼저 Check를 눌러 서버 연결을 확인해주세요.";
 
     [RelayCommand]
     private async Task CheckConnectionAsync()
     {
+        HasCheckedConnection = true;
+
         bool connected =
             await _observerApiClient.CheckConnectionAsync();
 
+        IsServerConnected = connected;
+
         ConnectionStatus =
             connected ? "Connected" : "Disconnected";
+
+        ResultMessage =
+            connected
+                ? "입력한 경기 정보가 Server에 등록됩니다."
+                : "Server에 연결할 수 없습니다. 연결 상태를 확인해주세요.";
+
+        if (!_connectionTimer.IsEnabled)
+        {
+            _connectionTimer.Start();
+        }
     }
 
     [RelayCommand]
@@ -116,25 +147,25 @@ public partial class MainViewModel : ObservableValidator
     [ObservableProperty]
     private string redTeamLogoUrl = string.Empty;
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanApplyMatchInfo))]
     private async Task ApplyMatchInfoAsync()
     {
+        if (!HasCheckedConnection)
+        {
+            ResultMessage = "먼저 Check를 눌러 서버 연결을 확인해주세요.";
+            return;
+        }
+
+        if (!IsServerConnected)
+        {
+            ResultMessage = "Connected 상태에서만 경기 정보를 적용할 수 있습니다.";
+            return;
+        }
+
         ValidateAllProperties(); // ObservableValidator가 제공하는 메서드(ViewModel 안의 Validation 규칙들 전부 검사)
         if (HasErrors)
         {
             ResultMessage = "필수 입력 항목을 확인해주세요.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(MatchId))
-        {
-            ResultMessage = "Match ID를 입력해주세요.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(ObserverId))
-        {
-            ResultMessage = "Observer ID를 입력해주세요.";
             return;
         }
 
@@ -144,9 +175,7 @@ public partial class MainViewModel : ObservableValidator
             ObserverId = ObserverId,
             SentAt = DateTimeOffset.UtcNow.ToString("O"),
 
-            TournamentName =
-                string.IsNullOrWhiteSpace(TournamentName)
-                    ? null : TournamentName,
+            TournamentName = TournamentName,
 
             SetNumber = SetNumber,
 
@@ -155,14 +184,14 @@ public partial class MainViewModel : ObservableValidator
                 Blue = new TeamInfo
                 {
                     Name = BlueTeamName,
-                    Tag = string.IsNullOrWhiteSpace(BlueTeamTag) ? null : BlueTeamTag,
+                    Tag = BlueTeamTag,
                     LogoUrl = string.IsNullOrWhiteSpace(BlueTeamLogoUrl) ? null : BlueTeamLogoUrl
                 },
 
                 Red = new TeamInfo
                 {
                     Name = RedTeamName,
-                    Tag = string.IsNullOrWhiteSpace(RedTeamTag) ? null : RedTeamTag,
+                    Tag = RedTeamTag,
                     LogoUrl = string.IsNullOrWhiteSpace(RedTeamLogoUrl) ? null : RedTeamLogoUrl
                 }
             }
@@ -180,4 +209,40 @@ public partial class MainViewModel : ObservableValidator
         }
     }
 
+    private bool CanApplyMatchInfo()
+    {
+        return HasCheckedConnection && IsServerConnected;
+    }
+
+
+    private void UpdateConnectionState(bool connected)
+    {
+        bool connectionChanged =
+            IsServerConnected != connected;
+
+        IsServerConnected = connected;
+
+        ConnectionStatus =
+            connected ? "Connected" : "Disconnected";
+
+        if (!connectionChanged)
+        {
+            return;
+        }
+
+        ResultMessage =
+            connected
+                ? "Server에 연결되었습니다. 경기 정보를 전송할 수 있습니다."
+                : "Server 연결이 끊어졌습니다. 연결 상태를 확인해주세요.";
+    }
+
+    private async void ConnectionTimer_Tick(
+        object? sender,
+        EventArgs e)
+    {
+        bool connected =
+            await _observerApiClient.CheckConnectionAsync();
+
+        UpdateConnectionState(connected);
+    }
 }
