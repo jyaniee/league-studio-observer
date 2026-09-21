@@ -34,6 +34,19 @@ public sealed class ObserverApiClient : IObserverApiClient
         }
     }
 
+    public async Task SendMatchInfoAsync(
+        ObserverMatchInfoRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        using var response =
+            await _httpClient.PostAsJsonAsync(
+                "/observer/match-info",
+                request,
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
     public async Task SendNextDragonAsync(
         string matchId,
         string observerId,

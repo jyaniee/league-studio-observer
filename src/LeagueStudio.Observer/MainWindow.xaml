@@ -2,92 +2,190 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="League Studio Observer"
-        Height="500"
-        Width="600">
+        Height="850"
+        Width="650">
 
-    <StackPanel Margin="24">
-
-        <TextBlock
-            Text="League Studio Observer"
-            FontSize="24"
-            FontWeight="Bold"
-            Margin="0,0,0,24" />
-
-        <!-- Server -->
-        <TextBlock
-            Text="Server"
-            FontSize="18"
-            FontWeight="SemiBold" />
-
-        <StackPanel
-            Orientation="Horizontal"
-            Margin="0,8,0,20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="24">
 
             <TextBlock
-                Text="Status:"
-                Margin="0,0,8,0" />
+                Text="League Studio Observer"
+                FontSize="24"
+                FontWeight="Bold"
+                Margin="0,0,0,24" />
+
+            <!-- Server -->
+            <TextBlock
+                Text="Server"
+                FontSize="18"
+                FontWeight="SemiBold" />
+
+            <StackPanel
+                Orientation="Horizontal"
+                Margin="0,8,0,12">
+
+                <TextBlock
+                    Text="Status:"
+                    Margin="0,0,8,0" />
+
+                <TextBlock
+                    Text="{Binding ConnectionStatus}" />
+
+            </StackPanel>
+
+            <Button
+                Content="Check Connection"
+                Command="{Binding CheckConnectionCommand}"
+                Width="160"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,24" />
+
+
+            <!-- Match 기본 식별 정보 -->
+            <TextBlock
+                Text="Match"
+                FontSize="18"
+                FontWeight="SemiBold" />
 
             <TextBlock
-                Text="{Binding ConnectionStatus}" />
+                Text="Match ID"
+                Margin="0,8,0,4" />
+
+            <TextBox
+                Text="{Binding MatchId}"
+                Width="250"
+                HorizontalAlignment="Left" />
+
+            <TextBlock
+                Text="Observer ID"
+                Margin="0,12,0,4" />
+
+            <TextBox
+                Text="{Binding ObserverId}"
+                Width="250"
+                HorizontalAlignment="Left" />
+
+
+            <!-- Match Setup -->
+            <TextBlock
+                Text="Match Setup"
+                FontSize="18"
+                FontWeight="SemiBold"
+                Margin="0,24,0,8" />
+
+            <TextBlock Text="Tournament Name" />
+
+            <TextBox
+                Text="{Binding TournamentName}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,8" />
+
+            <TextBlock Text="Set Number" />
+
+            <TextBox
+                Text="{Binding SetNumber}"
+                Width="100"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,16" />
+
+
+            <!-- Blue Team -->
+            <TextBlock
+                Text="Blue Team"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Margin="0,8,0,8" />
+
+            <TextBlock Text="Team Name" />
+
+            <TextBox
+                Text="{Binding BlueTeamName}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,8" />
+
+            <TextBlock Text="Team Tag" />
+
+            <TextBox
+                Text="{Binding BlueTeamTag}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,8" />
+
+            <TextBlock Text="Logo URL" />
+
+            <TextBox
+                Text="{Binding BlueTeamLogoUrl}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,16" />
+
+
+            <!-- Red Team -->
+            <TextBlock
+                Text="Red Team"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Margin="0,8,0,8" />
+
+            <TextBlock Text="Team Name" />
+
+            <TextBox
+                Text="{Binding RedTeamName}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,8" />
+
+            <TextBlock Text="Team Tag" />
+
+            <TextBox
+                Text="{Binding RedTeamTag}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,8" />
+
+            <TextBlock Text="Logo URL" />
+
+            <TextBox
+                Text="{Binding RedTeamLogoUrl}"
+                Width="250"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,12" />
+
+            <Button
+                Content="Apply Match Info"
+                Command="{Binding ApplyMatchInfoCommand}"
+                Width="160"
+                HorizontalAlignment="Left"
+                Margin="0,4,0,24" />
+
+
+            <!-- Dragon: 기존 기능 유지 -->
+            <TextBlock
+                Text="Next Dragon"
+                FontSize="18"
+                FontWeight="SemiBold"
+                Margin="0,8,0,8" />
+
+            <ComboBox
+                ItemsSource="{Binding DragonTypes}"
+                SelectedItem="{Binding SelectedDragon}"
+                Width="250"
+                HorizontalAlignment="Left" />
+
+            <Button
+                Content="Apply Dragon"
+                Command="{Binding ApplyDragonCommand}"
+                Width="160"
+                HorizontalAlignment="Left"
+                Margin="0,12,0,16" />
+
+            <TextBlock
+                Text="{Binding ResultMessage}"
+                TextWrapping="Wrap" />
 
         </StackPanel>
-
-        <Button
-            Content="Check Connection"
-            Command="{Binding CheckConnectionCommand}"
-            Width="160"
-            HorizontalAlignment="Left"
-            Margin="0,0,0,24" />
-
-        <!-- Match -->
-        <TextBlock
-            Text="Match"
-            FontSize="18"
-            FontWeight="SemiBold" />
-
-        <TextBlock
-            Text="Match ID"
-            Margin="0,8,0,4" />
-
-        <TextBox
-            Text="{Binding MatchId}"
-            Width="250"
-            HorizontalAlignment="Left" />
-
-        <TextBlock
-            Text="Observer ID"
-            Margin="0,12,0,4" />
-
-        <TextBox
-            Text="{Binding ObserverId}"
-            Width="250"
-            HorizontalAlignment="Left" />
-
-        <!-- Dragon -->
-        <TextBlock
-            Text="Next Dragon"
-            FontSize="18"
-            FontWeight="SemiBold"
-            Margin="0,24,0,8" />
-
-        <ComboBox
-            ItemsSource="{Binding DragonTypes}"
-            SelectedItem="{Binding SelectedDragon}"
-            Width="250"
-            HorizontalAlignment="Left" />
-
-        <Button
-            Content="Apply Dragon"
-            Command="{Binding ApplyDragonCommand}"
-            Width="160"
-            HorizontalAlignment="Left"
-            Margin="0,12,0,16" />
-
-        <!-- Result -->
-        <TextBlock
-            Text="{Binding ResultMessage}"
-            TextWrapping="Wrap" />
-
-    </StackPanel>
+    </ScrollViewer>
 
 </Window>
