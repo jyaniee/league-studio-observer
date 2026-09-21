@@ -36,7 +36,7 @@ public partial class MainViewModel : ObservableObject
     private string connectionStatus = "Disconnected";
 
     [ObservableProperty]
-    private string resultMessage = string.Empty;
+    private string resultMessage = "입력한 경기 정보가 Server에 등록됩니다.";
 
     [RelayCommand]
     private async Task CheckConnectionAsync()
@@ -114,7 +114,13 @@ public partial class MainViewModel : ObservableObject
             return;
         }
 
-        if(string.IsNullOrWhiteSpace(BlueTeamName) || string.IsNullOrWhiteSpace(RedTeamName))
+        IsBlueTeamNameInvalid =
+            string.IsNullOrWhiteSpace(BlueTeamName);
+
+        IsRedTeamNameInvalid =
+            string.IsNullOrWhiteSpace(RedTeamName);
+
+        if (IsBlueTeamNameInvalid || IsRedTeamNameInvalid)
         {
             ResultMessage = "Blue/Red 팀 이름을 입력해주세요.";
             return;
@@ -161,4 +167,10 @@ public partial class MainViewModel : ObservableObject
             ResultMessage = $"경기 정보 적용 실패: {ex.Message}";
         }
     }
+
+    [ObservableProperty]
+    private bool isBlueTeamNameInvalid;
+
+    [ObservableProperty]
+    private bool isRedTeamNameInvalid;
 }

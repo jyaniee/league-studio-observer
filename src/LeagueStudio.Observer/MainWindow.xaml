@@ -1,191 +1,1167 @@
 ﻿<Window x:Class="LeagueStudio.Observer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
         Title="League Studio Observer"
-        Height="850"
-        Width="650">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel Margin="24">
+        Width="1200"
+        Height="760"
 
-            <TextBlock
-                Text="League Studio Observer"
-                FontSize="24"
-                FontWeight="Bold"
-                Margin="0,0,0,24" />
+        MinWidth="1000"
+        MinHeight="650"
 
-            <!-- Server -->
-            <TextBlock
-                Text="Server"
-                FontSize="18"
-                FontWeight="SemiBold" />
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="NoResize"
 
-            <StackPanel
-                Orientation="Horizontal"
-                Margin="0,8,0,12">
+        Background="{StaticResource BackgroundBrush}"
+        Foreground="{StaticResource TextPrimaryBrush}">
 
-                <TextBlock
-                    Text="Status:"
-                    Margin="0,0,8,0" />
+    <!-- ===================================================== -->
+    <!-- League Studio Theme                                   -->
+    <!-- ===================================================== -->
 
-                <TextBlock
-                    Text="{Binding ConnectionStatus}" />
+    <Window.Resources>
 
-            </StackPanel>
+        <!-- Brand -->
 
-            <Button
-                Content="Check Connection"
-                Command="{Binding CheckConnectionCommand}"
-                Width="160"
-                HorizontalAlignment="Left"
-                Margin="0,0,0,24" />
+        <SolidColorBrush x:Key="PrimaryBrush"
+                         Color="#8E62F7"/>
+
+        <SolidColorBrush x:Key="PrimaryHoverBrush"
+                         Color="#9D75FA"/>
+
+        <SolidColorBrush x:Key="PrimaryPressedBrush"
+                         Color="#784DE8"/>
+
+        <SolidColorBrush x:Key="PrimaryMutedBrush"
+                         Color="#268E62F7"/>
 
 
-            <!-- Match 기본 식별 정보 -->
-            <TextBlock
-                Text="Match"
-                FontSize="18"
-                FontWeight="SemiBold" />
+        <!-- Backgrounds -->
 
-            <TextBlock
-                Text="Match ID"
-                Margin="0,8,0,4" />
+        <SolidColorBrush x:Key="BackgroundBrush"
+                         Color="#0F0F14"/>
 
-            <TextBox
-                Text="{Binding MatchId}"
-                Width="250"
-                HorizontalAlignment="Left" />
+        <SolidColorBrush x:Key="SidebarBrush"
+                         Color="#121219"/>
 
-            <TextBlock
-                Text="Observer ID"
-                Margin="0,12,0,4" />
+        <SolidColorBrush x:Key="SurfaceBrush"
+                         Color="#17171F"/>
 
-            <TextBox
-                Text="{Binding ObserverId}"
-                Width="250"
-                HorizontalAlignment="Left" />
+        <SolidColorBrush x:Key="SurfaceSecondaryBrush"
+                         Color="#1D1D28"/>
+
+        <SolidColorBrush x:Key="SurfaceHoverBrush"
+                         Color="#232331"/>
 
 
-            <!-- Match Setup -->
-            <TextBlock
-                Text="Match Setup"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Margin="0,24,0,8" />
+        <!-- Borders -->
 
-            <TextBlock Text="Tournament Name" />
+        <SolidColorBrush x:Key="BorderBrush"
+                         Color="#2A2938"/>
 
-            <TextBox
-                Text="{Binding TournamentName}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,8" />
-
-            <TextBlock Text="Set Number" />
-
-            <TextBox
-                Text="{Binding SetNumber}"
-                Width="100"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,16" />
+        <SolidColorBrush x:Key="BorderHoverBrush"
+                         Color="#413B5C"/>
 
 
-            <!-- Blue Team -->
-            <TextBlock
-                Text="Blue Team"
-                FontSize="16"
-                FontWeight="SemiBold"
-                Margin="0,8,0,8" />
+        <!-- Text -->
 
-            <TextBlock Text="Team Name" />
+        <SolidColorBrush x:Key="TextPrimaryBrush"
+                         Color="#F4F2FF"/>
 
-            <TextBox
-                Text="{Binding BlueTeamName}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,8" />
+        <SolidColorBrush x:Key="TextSecondaryBrush"
+                         Color="#AAA5BF"/>
 
-            <TextBlock Text="Team Tag" />
-
-            <TextBox
-                Text="{Binding BlueTeamTag}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,8" />
-
-            <TextBlock Text="Logo URL" />
-
-            <TextBox
-                Text="{Binding BlueTeamLogoUrl}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,16" />
+        <SolidColorBrush x:Key="TextMutedBrush"
+                         Color="#77738A"/>
 
 
-            <!-- Red Team -->
-            <TextBlock
-                Text="Red Team"
-                FontSize="16"
-                FontWeight="SemiBold"
-                Margin="0,8,0,8" />
+        <!-- Status -->
 
-            <TextBlock Text="Team Name" />
+        <SolidColorBrush x:Key="SuccessBrush"
+                         Color="#67E8A5"/>
 
-            <TextBox
-                Text="{Binding RedTeamName}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,8" />
+        <SolidColorBrush x:Key="WarningBrush"
+                         Color="#F7C56B"/>
 
-            <TextBlock Text="Team Tag" />
-
-            <TextBox
-                Text="{Binding RedTeamTag}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,8" />
-
-            <TextBlock Text="Logo URL" />
-
-            <TextBox
-                Text="{Binding RedTeamLogoUrl}"
-                Width="250"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,12" />
-
-            <Button
-                Content="Apply Match Info"
-                Command="{Binding ApplyMatchInfoCommand}"
-                Width="160"
-                HorizontalAlignment="Left"
-                Margin="0,4,0,24" />
+        <SolidColorBrush x:Key="ErrorBrush"
+                         Color="#F47C95"/>
 
 
-            <!-- Dragon: 기존 기능 유지 -->
-            <TextBlock
-                Text="Next Dragon"
-                FontSize="18"
-                FontWeight="SemiBold"
-                Margin="0,8,0,8" />
+        <!-- Teams -->
 
-            <ComboBox
-                ItemsSource="{Binding DragonTypes}"
-                SelectedItem="{Binding SelectedDragon}"
-                Width="250"
-                HorizontalAlignment="Left" />
+        <SolidColorBrush x:Key="BlueTeamBrush"
+                         Color="#5798FF"/>
 
-            <Button
-                Content="Apply Dragon"
-                Command="{Binding ApplyDragonCommand}"
-                Width="160"
-                HorizontalAlignment="Left"
-                Margin="0,12,0,16" />
+        <SolidColorBrush x:Key="RedTeamBrush"
+                         Color="#FF6682"/>
 
-            <TextBlock
-                Text="{Binding ResultMessage}"
-                TextWrapping="Wrap" />
 
-        </StackPanel>
-    </ScrollViewer>
+        <!-- ================================================= -->
+        <!-- Default Text                                      -->
+        <!-- ================================================= -->
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimaryBrush}"/>
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- TextBox                                           -->
+        <!-- ================================================= -->
+
+        <Style TargetType="TextBox">
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimaryBrush}"/>
+
+            <Setter Property="Background"
+                    Value="{StaticResource SurfaceSecondaryBrush}"/>
+
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource BorderBrush}"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="Padding"
+                    Value="12,6"/>
+
+            <Setter Property="FontSize"
+                    Value="13"/>
+
+            <Setter Property="CaretBrush"
+                    Value="{StaticResource PrimaryBrush}"/>
+
+            <Setter Property="SelectionBrush"
+                    Value="{StaticResource PrimaryBrush}"/>
+
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="TextBox">
+
+                        <Border
+                            x:Name="TextBoxBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6">
+
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                Margin="{TemplateBinding Padding}"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="TextBoxBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource BorderHoverBrush}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsKeyboardFocused"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="TextBoxBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource PrimaryBrush}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+
+                                <Setter
+                                    TargetName="TextBoxBorder"
+                                    Property="Opacity"
+                                    Value="0.45"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- Primary Button                                    -->
+        <!-- ================================================= -->
+
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="Background"
+                    Value="{StaticResource PrimaryBrush}"/>
+
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource PrimaryBrush}"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="Padding"
+                    Value="16,10"/>
+
+            <Setter Property="FontSize"
+                    Value="13"/>
+
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border
+                            x:Name="ButtonBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="7">
+
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Margin="{TemplateBinding Padding}"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource PrimaryHoverBrush}"/>
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource PrimaryHoverBrush}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Background"
+                                    Value="{StaticResource PrimaryPressedBrush}"/>
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource PrimaryPressedBrush}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+
+                                <Setter
+                                    TargetName="ButtonBorder"
+                                    Property="Opacity"
+                                    Value="0.4"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- Navigation Button                                 -->
+        <!-- ================================================= -->
+
+        <Style x:Key="NavigationButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextSecondaryBrush}"/>
+
+            <Setter Property="Background"
+                    Value="Transparent"/>
+
+            <Setter Property="BorderBrush"
+                    Value="Transparent"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="Padding"
+                    Value="13,10"/>
+
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left"/>
+
+            <Setter Property="FontSize"
+                    Value="13"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border
+                            x:Name="NavigationBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="7">
+
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="Center"
+                                Margin="{TemplateBinding Padding}"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="NavigationBorder"
+                                    Property="Background"
+                                    Value="{StaticResource SurfaceHoverBrush}"/>
+
+                                <Setter
+                                    Property="Foreground"
+                                    Value="{StaticResource TextPrimaryBrush}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="NavigationBorder"
+                                    Property="Background"
+                                    Value="{StaticResource PrimaryMutedBrush}"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+        <!-- ================================================= -->
+        <!-- Close Button                                      -->
+        <!-- ================================================= -->
+
+        <Style x:Key="CloseButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextSecondaryBrush}"/>
+
+            <Setter Property="Background"
+                    Value="Transparent"/>
+
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+
+            <Setter Property="Width"
+                    Value="34"/>
+
+            <Setter Property="Height"
+                    Value="30"/>
+
+            <Setter Property="FontSize"
+                    Value="18"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border
+                            x:Name="CloseBorder"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="6">
+
+                            <ContentPresenter
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="CloseBorder"
+                                    Property="Background"
+                                    Value="#3B202A"/>
+
+                                <Setter
+                                    Property="Foreground"
+                                    Value="#FF8EA3"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter
+                                    TargetName="CloseBorder"
+                                    Property="Background"
+                                    Value="#582533"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </Window.Resources>
+
+
+    <!-- ===================================================== -->
+    <!-- Root                                                  -->
+    <!-- ===================================================== -->
+
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <!-- ================================================= -->
+        <!-- Sidebar                                           -->
+        <!-- ================================================= -->
+
+        <Border
+            Grid.Column="0"
+            Background="{StaticResource SidebarBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="0,0,1,0">
+
+            <Grid Margin="16">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="32"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+
+                <!-- Logo / App Name -->
+
+                <StackPanel Grid.Row="0">
+
+                    <TextBlock
+                        Text="LEAGUE STUDIO"
+                        FontSize="17"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource PrimaryBrush}"/>
+
+                    <TextBlock
+                        Text="Observer Tool"
+                        FontSize="12"
+                        Margin="0,4,0,0"
+                        Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                </StackPanel>
+
+
+                <!-- Navigation -->
+
+                <StackPanel Grid.Row="2">
+
+                    <TextBlock
+                        Text="OPERATION"
+                        FontSize="10"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource TextMutedBrush}"
+                        Margin="12,0,0,8"/>
+
+
+                    <!-- Active page -->
+
+                    <Button
+                        Content="Match Setup"
+                        Style="{StaticResource NavigationButtonStyle}"
+                        Foreground="{StaticResource PrimaryBrush}"
+                        Background="{StaticResource PrimaryMutedBrush}"/>
+
+
+                    <Button
+                        Content="Live Match"
+                        Style="{StaticResource NavigationButtonStyle}"
+                        Margin="0,4,0,0"/>
+
+                    <Button
+                        Content="Overrides"
+                        Style="{StaticResource NavigationButtonStyle}"
+                        Margin="0,4,0,0"/>
+
+
+                    <TextBlock
+                        Text="SYSTEM"
+                        FontSize="10"
+                        FontWeight="SemiBold"
+                        Foreground="{StaticResource TextMutedBrush}"
+                        Margin="12,28,0,8"/>
+
+                    <Button
+                        Content="Settings"
+                        Style="{StaticResource NavigationButtonStyle}"/>
+
+                </StackPanel>
+
+
+                <!-- Version -->
+
+                <StackPanel Grid.Row="3">
+
+                    <Border
+                        Height="1"
+                        Background="{StaticResource BorderBrush}"
+                        Margin="0,0,0,14"/>
+
+                    <TextBlock
+                        Text="League Studio Observer"
+                        FontSize="11"
+                        Foreground="{StaticResource TextMutedBrush}"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- ================================================= -->
+        <!-- Main Content                                      -->
+        <!-- ================================================= -->
+
+        <Grid Grid.Column="1">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="68"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <!-- ================================================= -->
+            <!-- Header                                             -->
+            <!-- ================================================= -->
+
+            <Border
+                Grid.Row="0"
+                Background="{StaticResource BackgroundBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1"
+                MouseLeftButtonDown="Header_MouseLeftButtonDown">
+
+                <Grid Margin="28,0">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <StackPanel
+                        VerticalAlignment="Center">
+
+                        <TextBlock
+                            Text="Match Setup"
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                        <TextBlock
+                            Text="경기 시작 전 운영 정보를 설정합니다."
+                            FontSize="12"
+                            Margin="0,3,0,0"
+                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                    </StackPanel>
+
+
+                    <!-- Server Status -->
+
+                    <StackPanel
+                        Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                        <Ellipse
+                            Width="8"
+                            Height="8"
+                            Margin="0,0,8,0">
+
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+
+                                    <!-- 기본값: Disconnected -->
+                                    <Setter
+                                        Property="Fill"
+                                        Value="{StaticResource ErrorBrush}"/>
+
+                                    <Style.Triggers>
+
+                                        <DataTrigger
+                                            Binding="{Binding ConnectionStatus}"
+                                            Value="Connected">
+
+                                            <Setter
+                                                Property="Fill"
+                                                Value="{StaticResource SuccessBrush}"/>
+
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+
+                                </Style>
+                            </Ellipse.Style>
+
+                        </Ellipse>
+
+                        <TextBlock
+                            Text="{Binding ConnectionStatus}"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource TextSecondaryBrush}"
+                            Margin="0,0,14,0"/>
+
+                        <Button
+                            Content="Check"
+                            Command="{Binding CheckConnectionCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Padding="12,6"/>
+
+                        <Button
+                            Content="×"
+                            Click="CloseButton_Click"
+                            Style="{StaticResource CloseButtonStyle}"
+                            Margin="8,0,0,0"/>
+
+                    </StackPanel>
+
+                </Grid>
+
+            </Border>
+
+
+            <!-- ================================================= -->
+            <!-- Page                                               -->
+            <!-- ================================================= -->
+
+            <Grid Grid.Row="1">
+
+                <ScrollViewer
+                    x:Name="MainScrollViewer"
+                    VerticalScrollBarVisibility="Hidden"
+                    HorizontalScrollBarVisibility="Disabled"
+                    Background="{StaticResource BackgroundBrush}"
+                    ScrollChanged="MainScrollViewer_ScrollChanged">
+
+                    <StackPanel Margin="32">
+
+
+                        <!-- ================================================= -->
+                        <!-- Session                                            -->
+                        <!-- ================================================= -->
+
+                        <TextBlock
+                            Text="Session"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextPrimaryBrush}"
+                            Margin="0,0,0,10"/>
+
+
+                        <Border
+                            Background="{StaticResource SurfaceBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="20"
+                            Margin="0,0,0,24">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <!-- Match ID -->
+
+                                <StackPanel Grid.Column="0">
+
+                                    <TextBlock
+                                        Text="Match ID"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding MatchId}"/>
+
+                                </StackPanel>
+
+
+                                <!-- Observer ID -->
+
+                                <StackPanel Grid.Column="2">
+
+                                    <TextBlock
+                                        Text="Observer ID"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding ObserverId}"/>
+
+                                </StackPanel>
+
+                            </Grid>
+
+                        </Border>
+
+
+                        <!-- ================================================= -->
+                        <!-- Match Information                                  -->
+                        <!-- ================================================= -->
+
+                        <TextBlock
+                            Text="Match Information"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextPrimaryBrush}"
+                            Margin="0,0,0,10"/>
+
+
+                        <Border
+                            Background="{StaticResource SurfaceBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="20"
+                            Margin="0,0,0,24">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition Width="180"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <StackPanel Grid.Column="0">
+
+                                    <TextBlock
+                                        Text="Tournament Name"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding TournamentName}"/>
+
+                                </StackPanel>
+
+
+                                <StackPanel Grid.Column="2">
+
+                                    <TextBlock
+                                        Text="Set Number"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding SetNumber}"/>
+
+                                </StackPanel>
+
+                            </Grid>
+
+                        </Border>
+
+
+                        <!-- ================================================= -->
+                        <!-- Teams                                              -->
+                        <!-- ================================================= -->
+
+                        <TextBlock
+                            Text="Teams"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextPrimaryBrush}"
+                            Margin="0,0,0,10"/>
+
+
+                        <Grid Margin="0,0,0,24">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <!-- Blue Team -->
+
+                            <Border
+                                Grid.Column="0"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource BlueTeamBrush}"
+                                BorderThickness="2,1,1,1"
+                                CornerRadius="8"
+                                Padding="20">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                        Text="BLUE TEAM"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource BlueTeamBrush}"
+                                        Margin="0,0,0,18"/>
+
+
+                                    <TextBlock
+                                        Text="Team Name"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding BlueTeamName}"
+                                        Margin="0,0,0,14">
+
+                                        <TextBox.Style>
+                                            <Style
+                                                TargetType="TextBox"
+                                                BasedOn="{StaticResource {x:Type TextBox}}">
+
+                                                <Style.Triggers>
+
+                                                    <DataTrigger
+                                                        Binding="{Binding IsBlueTeamNameInvalid}"
+                                                        Value="True">
+
+                                                        <Setter
+                                                            Property="BorderBrush"
+                                                            Value="{StaticResource ErrorBrush}"/>
+
+                                                        <Setter
+                                                            Property="Background"
+                                                            Value="#18F47C95"/>
+
+                                                    </DataTrigger>
+
+                                                </Style.Triggers>
+
+                                            </Style>
+                                        </TextBox.Style>
+
+                                    </TextBox>
+
+
+                                    <TextBlock
+                                        Text="Team Tag"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding BlueTeamTag}"
+                                        Margin="0,0,0,14"/>
+
+
+                                    <TextBlock
+                                        Text="Logo URL"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding BlueTeamLogoUrl}"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+
+                            <!-- Red Team -->
+
+                            <Border
+                                Grid.Column="2"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource RedTeamBrush}"
+                                BorderThickness="2,1,1,1"
+                                CornerRadius="8"
+                                Padding="20">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                        Text="RED TEAM"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource RedTeamBrush}"
+                                        Margin="0,0,0,18"/>
+
+
+                                    <TextBlock
+                                        Text="Team Name"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding RedTeamName}"
+                                        Margin="0,0,0,14">
+
+                                        <TextBox.Style>
+                                            <Style
+                                                TargetType="TextBox"
+                                                BasedOn="{StaticResource {x:Type TextBox}}">
+
+                                                <Style.Triggers>
+
+                                                    <DataTrigger
+                                                        Binding="{Binding IsRedTeamNameInvalid}"
+                                                        Value="True">
+
+                                                        <Setter
+                                                            Property="BorderBrush"
+                                                            Value="{StaticResource ErrorBrush}"/>
+
+                                                        <Setter
+                                                            Property="Background"
+                                                            Value="#18F47C95"/>
+
+                                                    </DataTrigger>
+
+                                                </Style.Triggers>
+
+                                            </Style>
+                                        </TextBox.Style>
+
+                                    </TextBox>
+
+
+                                    <TextBlock
+                                        Text="Team Tag"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding RedTeamTag}"
+                                        Margin="0,0,0,14"/>
+
+
+                                    <TextBlock
+                                        Text="Logo URL"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding RedTeamLogoUrl}"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </Grid>
+
+
+                        <!-- ================================================= -->
+                        <!-- Footer Actions                                     -->
+                        <!-- ================================================= -->
+
+                        <Border
+                            Background="{StaticResource SurfaceBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="16">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <StackPanel
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center">
+
+                                    <TextBlock
+                                        Text="Ready to apply"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                                    <TextBlock
+                                        Text="{Binding ResultMessage}"
+                                        FontSize="11"
+                                        Margin="0,3,0,0"
+                                        Foreground="{StaticResource TextMutedBrush}"/>
+
+                                </StackPanel>
+
+
+                                <Button
+                                    Grid.Column="1"
+                                    Content="Apply Match Info"
+                                    Command="{Binding ApplyMatchInfoCommand}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    MinWidth="160"/>
+
+                            </Grid>
+
+                        </Border>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
+
+                <!-- ================================================= -->
+                <!-- Scroll Hint                                       -->
+                <!-- ================================================= -->
+
+                <Grid
+                    x:Name="ScrollHint"
+                    Height="60"
+                    VerticalAlignment="Bottom"
+                    IsHitTestVisible="False"
+                    Visibility="Collapsed" Cursor="">
+
+                    <Grid.Background>
+
+                        <LinearGradientBrush
+                            StartPoint="0,0"
+                            EndPoint="0,1">
+
+                            <GradientStop
+                                Color="#000F0F14"
+                                Offset="0"/>
+
+                            <GradientStop
+                                Color="#990F0F14"
+                                Offset="0.45"/>
+
+                            <GradientStop
+                                Color="#FF0F0F14"
+                                Offset="1"/>
+
+                        </LinearGradientBrush>
+
+                    </Grid.Background>
+
+
+                    <Border
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Margin="0,0,0,9"
+                        Background="#DD1D1D28"
+                        BorderBrush="#502A2938"
+                        BorderThickness="1"
+                        CornerRadius="15">
+
+                        <Path
+                            Data="M 4 7 L 10 13 L 16 7"
+                            Stroke="{StaticResource PrimaryBrush}"
+                            StrokeThickness="2"
+                            StrokeStartLineCap="Round"
+                            StrokeEndLineCap="Round"
+                            StrokeLineJoin="Round"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="-1.5,0,1.5,0"
+                            />
+
+                    </Border>
+
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
 
 </Window>
