@@ -4,7 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using LeagueStudio.Observer.Models;
 using LeagueStudio.Observer.Services.Server;
-public partial class MainViewModel : ObservableObject
+using System.ComponentModel.DataAnnotations;
+public partial class MainViewModel : ObservableValidator
 {
     private readonly IObserverApiClient _observerApiClient;
 
@@ -24,9 +25,13 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Match ID를 입력해주세요.")]
     private string matchId = "test-match-001";
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Observer ID를 입력해주세요.")]
     private string observerId = "observer-01";
 
     [ObservableProperty]
@@ -76,24 +81,36 @@ public partial class MainViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "대회 이름을 입력해주세요.")]
     private string tournamentName = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "세트 번호를 입력해주세요.")]
     private int? setNumber = 1;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Blue 팀 이름을 입력해주세요.")]
     private string blueTeamName = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Blue 팀 태그를 입력해주세요.")]
     private string blueTeamTag = string.Empty;
 
     [ObservableProperty]
     private string blueTeamLogoUrl = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Red 팀 이름을 입력해주세요.")]
     private string redTeamName = string.Empty;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required(ErrorMessage = "Red 팀 태그를 입력해주세요.")]
     private string redTeamTag = string.Empty;
 
     [ObservableProperty]
@@ -102,6 +119,13 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private async Task ApplyMatchInfoAsync()
     {
+        ValidateAllProperties(); // ObservableValidator가 제공하는 메서드(ViewModel 안의 Validation 규칙들 전부 검사)
+        if (HasErrors)
+        {
+            ResultMessage = "필수 입력 항목을 확인해주세요.";
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(MatchId))
         {
             ResultMessage = "Match ID를 입력해주세요.";
@@ -111,18 +135,6 @@ public partial class MainViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(ObserverId))
         {
             ResultMessage = "Observer ID를 입력해주세요.";
-            return;
-        }
-
-        IsBlueTeamNameInvalid =
-            string.IsNullOrWhiteSpace(BlueTeamName);
-
-        IsRedTeamNameInvalid =
-            string.IsNullOrWhiteSpace(RedTeamName);
-
-        if (IsBlueTeamNameInvalid || IsRedTeamNameInvalid)
-        {
-            ResultMessage = "Blue/Red 팀 이름을 입력해주세요.";
             return;
         }
 
@@ -168,9 +180,4 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    [ObservableProperty]
-    private bool isBlueTeamNameInvalid;
-
-    [ObservableProperty]
-    private bool isRedTeamNameInvalid;
 }

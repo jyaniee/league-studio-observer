@@ -140,6 +140,9 @@
 
             <Setter Property="VerticalContentAlignment"
                     Value="Center"/>
+            
+            <Setter Property="Validation.ErrorTemplate"
+                    Value="{x:Null}"/>
 
             <Setter Property="Template">
 
@@ -189,6 +192,21 @@
                                     TargetName="TextBoxBorder"
                                     Property="Opacity"
                                     Value="0.45"/>
+
+                            </Trigger>
+
+                            <Trigger Property="Validation.HasError"
+                                    Value="True">
+
+                                <Setter
+                                    TargetName="TextBoxBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource ErrorBrush}"/>
+
+                                <Setter
+                                    TargetName="TextBoxBorder"
+                                    Property="Background"
+                                    Value="#18F47C95"/>
 
                             </Trigger>
 
@@ -901,35 +919,7 @@
 
                                     <TextBox
                                         Text="{Binding BlueTeamName}"
-                                        Margin="0,0,0,14">
-
-                                        <TextBox.Style>
-                                            <Style
-                                                TargetType="TextBox"
-                                                BasedOn="{StaticResource {x:Type TextBox}}">
-
-                                                <Style.Triggers>
-
-                                                    <DataTrigger
-                                                        Binding="{Binding IsBlueTeamNameInvalid}"
-                                                        Value="True">
-
-                                                        <Setter
-                                                            Property="BorderBrush"
-                                                            Value="{StaticResource ErrorBrush}"/>
-
-                                                        <Setter
-                                                            Property="Background"
-                                                            Value="#18F47C95"/>
-
-                                                    </DataTrigger>
-
-                                                </Style.Triggers>
-
-                                            </Style>
-                                        </TextBox.Style>
-
-                                    </TextBox>
+                                        Margin="0,0,0,14"/>
 
 
                                     <TextBlock
@@ -985,35 +975,7 @@
 
                                     <TextBox
                                         Text="{Binding RedTeamName}"
-                                        Margin="0,0,0,14">
-
-                                        <TextBox.Style>
-                                            <Style
-                                                TargetType="TextBox"
-                                                BasedOn="{StaticResource {x:Type TextBox}}">
-
-                                                <Style.Triggers>
-
-                                                    <DataTrigger
-                                                        Binding="{Binding IsRedTeamNameInvalid}"
-                                                        Value="True">
-
-                                                        <Setter
-                                                            Property="BorderBrush"
-                                                            Value="{StaticResource ErrorBrush}"/>
-
-                                                        <Setter
-                                                            Property="Background"
-                                                            Value="#18F47C95"/>
-
-                                                    </DataTrigger>
-
-                                                </Style.Triggers>
-
-                                            </Style>
-                                        </TextBox.Style>
-
-                                    </TextBox>
+                                        Margin="0,0,0,14"/>
 
 
                                     <TextBlock
