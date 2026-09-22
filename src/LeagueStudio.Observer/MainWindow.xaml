@@ -25,6 +25,8 @@
 
         <!-- Brand -->
 
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        
         <SolidColorBrush x:Key="PrimaryBrush"
                          Color="#8E62F7"/>
 
@@ -564,6 +566,7 @@
 
                     <Button
                         Content="Match Setup"
+                        Command="{Binding ShowMatchSetupCommand}"
                         Style="{StaticResource NavigationButtonStyle}"
                         Foreground="{StaticResource PrimaryBrush}"
                         Background="{StaticResource PrimaryMutedBrush}"/>
@@ -571,6 +574,7 @@
 
                     <Button
                         Content="Live Match"
+                        Command="{Binding ShowLiveMatchCommand}"
                         Style="{StaticResource NavigationButtonStyle}"
                         Margin="0,4,0,0"/>
 
@@ -650,13 +654,13 @@
                         VerticalAlignment="Center">
 
                         <TextBlock
-                            Text="Match Setup"
+                            Text="{Binding PageTitle}"
                             FontSize="20"
                             FontWeight="SemiBold"
                             Foreground="{StaticResource TextPrimaryBrush}"/>
 
                         <TextBlock
-                            Text="경기 시작 전 운영 정보를 설정합니다."
+                            Text="{Binding PageDescription}"
                             FontSize="12"
                             Margin="0,3,0,0"
                             Foreground="{StaticResource TextSecondaryBrush}"/>
@@ -732,7 +736,7 @@
             <!-- Page                                               -->
             <!-- ================================================= -->
 
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" Visibility="{Binding IsMatchSetupPage, Converter={StaticResource BooleanToVisibilityConverter}}">
 
                 <ScrollViewer
                     x:Name="MainScrollViewer"
@@ -1119,6 +1123,251 @@
                     </Border>
 
                 </Grid>
+
+            </Grid>
+
+            <!-- ================================================= -->
+            <!-- Live Match                                        -->
+            <!-- ================================================= -->
+
+            <Grid
+                Grid.Row="1"
+                Visibility="{Binding IsLiveMatchPage,
+                    Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
+                    Background="{StaticResource BackgroundBrush}">
+
+                    <StackPanel
+                        Margin="32"
+                        DataContext="{Binding LiveMatch}">
+
+                        <Border
+                            Background="{StaticResource SurfaceBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="16"
+                            Margin="0,0,0,24">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    Text="{Binding StatusMessage}"
+                                    VerticalAlignment="Center"
+                                    Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                <Button
+                                    Grid.Column="1"
+                                    Content="Refresh"
+                                    Command="{Binding RefreshCommand}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    MinWidth="100"/>
+
+                            </Grid>
+
+                        </Border>
+
+                        <StackPanel>
+
+                            <StackPanel.Style>
+
+                                <Style TargetType="StackPanel">
+
+                                    <Setter
+                                        Property="Visibility"
+                                        Value="Collapsed"/>
+
+                                    <Style.Triggers>
+
+                                        <DataTrigger
+                                            Binding="{Binding HasMatch}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Visibility"
+                                                Value="Visible"/>
+
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+
+                                </Style>
+
+                            </StackPanel.Style>
+
+                            <TextBlock
+                                Text="Session"
+                                FontSize="15"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource TextPrimaryBrush}"
+                                Margin="0,0,0,10"/>
+
+                            <Border
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="20"
+                                Margin="0,0,0,24">
+
+                                <Grid>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="24"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+
+                                        <TextBlock
+                                            Text="Match ID"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.MatchId}"
+                                            Margin="0,6,0,18"/>
+
+                                        <TextBlock
+                                            Text="Tournament Name"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.TournamentName}"
+                                            Margin="0,6,0,0"/>
+
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+
+                                        <TextBlock
+                                            Text="Observer ID"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.ObserverId}"
+                                            Margin="0,6,0,18"/>
+
+                                        <TextBlock
+                                            Text="Set Number"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.SetNumber}"
+                                            Margin="0,6,0,18"/>
+
+                                        <TextBlock
+                                            Text="Updated At"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.UpdatedAt}"
+                                            Margin="0,6,0,0"/>
+
+                                    </StackPanel>
+
+                                </Grid>
+
+                            </Border>
+
+                            <TextBlock
+                                Text="Teams"
+                                FontSize="15"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource TextPrimaryBrush}"
+                                Margin="0,0,0,10"/>
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                    Grid.Column="0"
+                                    Background="{StaticResource SurfaceBrush}"
+                                    BorderBrush="{StaticResource BlueTeamBrush}"
+                                    BorderThickness="2,1,1,1"
+                                    CornerRadius="8"
+                                    Padding="20">
+
+                                    <StackPanel>
+
+                                        <TextBlock
+                                            Text="BLUE TEAM"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource BlueTeamBrush}"
+                                            Margin="0,0,0,14"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.Teams.Blue.Name}"
+                                            FontSize="18"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.Teams.Blue.Tag}"
+                                            Margin="0,6,0,12"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.Teams.Blue.LogoUrl}"
+                                            TextWrapping="Wrap"
+                                            Foreground="{StaticResource TextMutedBrush}"/>
+
+                                    </StackPanel>
+
+                                </Border>
+
+                                <Border
+                                    Grid.Column="2"
+                                    Background="{StaticResource SurfaceBrush}"
+                                    BorderBrush="{StaticResource RedTeamBrush}"
+                                    BorderThickness="2,1,1,1"
+                                    CornerRadius="8"
+                                    Padding="20">
+
+                                    <StackPanel>
+
+                                        <TextBlock
+                                            Text="RED TEAM"
+                                            FontWeight="Bold"
+                                            Foreground="{StaticResource RedTeamBrush}"
+                                            Margin="0,0,0,14"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.Teams.Red.Name}"
+                                            FontSize="18"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.Teams.Red.Tag}"
+                                            Margin="0,6,0,12"
+                                            Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                                        <TextBlock
+                                            Text="{Binding CurrentState.Teams.Red.LogoUrl}"
+                                            TextWrapping="Wrap"
+                                            Foreground="{StaticResource TextMutedBrush}"/>
+
+                                    </StackPanel>
+
+                                </Border>
+
+                            </Grid>
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </ScrollViewer>
 
             </Grid>
 
