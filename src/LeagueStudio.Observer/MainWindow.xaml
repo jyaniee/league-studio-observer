@@ -552,7 +552,7 @@
 
                 <!-- Navigation -->
 
-                <StackPanel Grid.Row="2">
+                <StackPanel x:Name="NavigationMenu" Grid.Row="2" >
 
                     <TextBlock
                         Text="OPERATION"
@@ -569,19 +569,22 @@
                         Command="{Binding ShowMatchSetupCommand}"
                         Style="{StaticResource NavigationButtonStyle}"
                         Foreground="{StaticResource PrimaryBrush}"
-                        Background="{StaticResource PrimaryMutedBrush}"/>
+                        Background="{StaticResource PrimaryMutedBrush}"
+                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
 
 
                     <Button
                         Content="Live Match"
                         Command="{Binding ShowLiveMatchCommand}"
                         Style="{StaticResource NavigationButtonStyle}"
-                        Margin="0,4,0,0"/>
+                        Margin="0,4,0,0"
+                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
 
                     <Button
                         Content="Overrides"
                         Style="{StaticResource NavigationButtonStyle}"
-                        Margin="0,4,0,0"/>
+                        Margin="0,4,0,0"
+                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
 
 
                     <TextBlock
@@ -589,11 +592,13 @@
                         FontSize="10"
                         FontWeight="SemiBold"
                         Foreground="{StaticResource TextMutedBrush}"
-                        Margin="12,28,0,8"/>
+                        Margin="12,28,0,8"
+                        />
 
                     <Button
                         Content="Settings"
-                        Style="{StaticResource NavigationButtonStyle}"/>
+                        Style="{StaticResource NavigationButtonStyle}"
+                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
 
                 </StackPanel>
 

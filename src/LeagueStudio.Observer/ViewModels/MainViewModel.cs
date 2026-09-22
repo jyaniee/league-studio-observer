@@ -150,7 +150,15 @@ public partial class MainViewModel : ObservableValidator
         PageDescription =
             "Server에 등록된 현재 경기 정보를 확인합니다.";
 
-        if (LiveMatch.RefreshCommand.CanExecute(null))
+        _ = RefreshLiveMatchAfterNavigationAsync();
+
+    }
+
+    private async Task RefreshLiveMatchAfterNavigationAsync()
+    {
+        await Task.Yield();
+
+        if(LiveMatch.RefreshCommand.CanExecute(null))
         {
             await LiveMatch.RefreshCommand.ExecuteAsync(null);
         }
