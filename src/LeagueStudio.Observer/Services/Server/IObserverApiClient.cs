@@ -6,6 +6,9 @@ public interface IObserverApiClient
 {
     Task<bool> CheckConnectionAsync(
         CancellationToken cancellationToken = default);
+    
+    Task<ObserverStateResponse?> GetObserverStateAsync(
+        CancellationToken cancellationToken = default);
 
     // 경기정보 전송
     Task SendMatchInfoAsync(
@@ -19,4 +22,5 @@ public interface IObserverApiClient
         DragonType dragonType,
         double confidence,
         CancellationToken cancellationToken = default);
+
 }

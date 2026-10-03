@@ -47,6 +47,19 @@ public sealed class ObserverApiClient : IObserverApiClient
         response.EnsureSuccessStatusCode();
     }
 
+    public async Task<ObserverStateResponse?> GetObserverStateAsync(
+    CancellationToken cancellationToken = default)
+    {
+        using var response =
+            await _httpClient.GetAsync(
+                "/observer/state",
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadFromJsonAsync<ObserverStateResponse>(
+            cancellationToken: cancellationToken);
+    }
     public async Task SendNextDragonAsync(
         string matchId,
         string observerId,

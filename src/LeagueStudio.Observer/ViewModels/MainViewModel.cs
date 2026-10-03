@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Windows.Threading;
 public partial class MainViewModel : ObservableValidator
 {
+    public LiveMatchViewModel LiveMatch { get; }
     private readonly IObserverApiClient _observerApiClient;
     private readonly DispatcherTimer _connectionTimer;
 
@@ -21,9 +22,12 @@ public partial class MainViewModel : ObservableValidator
             DragonType.Chemtech
         ];
 
+
     public MainViewModel(IObserverApiClient observerApiClient)
     {
         _observerApiClient = observerApiClient;
+
+        LiveMatch = new LiveMatchViewModel(observerApiClient);
 
         _connectionTimer = new DispatcherTimer
         {
@@ -59,6 +63,21 @@ public partial class MainViewModel : ObservableValidator
 
     [ObservableProperty]
     private string resultMessage = "먼저 Check를 눌러 서버 연결을 확인해주세요.";
+
+    [ObservableProperty]
+    private bool isMatchSetupPage = true;
+
+    [ObservableProperty]
+    private bool isLiveMatchPage;
+
+    [ObservableProperty]
+    private string pageTitle = "Match Setup";
+
+    [ObservableProperty]
+    private string pageDescription =
+        "경기 시작 전 운영 정보를 설정합니다.";
+
+
 
     [RelayCommand]
     private async Task CheckConnectionAsync()
@@ -108,6 +127,40 @@ public partial class MainViewModel : ObservableValidator
         {
             ResultMessage =
                 $"Failed: {ex.Message}";
+        }
+    }
+    [RelayCommand]
+    private void ShowMatchSetup()
+    {
+        IsMatchSetupPage = true;
+        IsLiveMatchPage = false;
+
+        PageTitle = "Match Setup";
+        PageDescription =
+            "경기 시작 전 운영 정보를 설정합니다.";
+    }
+
+    [RelayCommand]
+    private async Task ShowLiveMatchAsync()
+    {
+        IsMatchSetupPage = false;
+        IsLiveMatchPage = true;
+
+        PageTitle = "Live Match";
+        PageDescription =
+            "Server에 등록된 현재 경기 정보를 확인합니다.";
+
+        _ = RefreshLiveMatchAfterNavigationAsync();
+
+    }
+
+    private async Task RefreshLiveMatchAfterNavigationAsync()
+    {
+        await Task.Yield();
+
+        if(LiveMatch.RefreshCommand.CanExecute(null))
+        {
+            await LiveMatch.RefreshCommand.ExecuteAsync(null);
         }
     }
 
