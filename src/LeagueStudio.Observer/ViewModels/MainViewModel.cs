@@ -97,6 +97,12 @@ public partial class MainViewModel : ObservableValidator
                 ? "입력한 경기 정보가 Server에 등록됩니다."
                 : "Server에 연결할 수 없습니다. 연결 상태를 확인해주세요.";
 
+        LiveMatch.SetServerAvailability(
+            connected,
+            connected
+                ? null
+                : "Server에 연결할 수 없습니다. 연결 상태를 확인해주세요.");
+
         if (!_connectionTimer.IsEnabled)
         {
             _connectionTimer.Start();
@@ -141,17 +147,30 @@ public partial class MainViewModel : ObservableValidator
     }
 
     [RelayCommand]
-    private async Task ShowLiveMatchAsync()
+    private void ShowLiveMatch()
     {
         IsMatchSetupPage = false;
         IsLiveMatchPage = true;
 
         PageTitle = "Live Match";
+
         PageDescription =
             "Server에 등록된 현재 경기 정보를 확인합니다.";
 
-        _ = RefreshLiveMatchAfterNavigationAsync();
+        if (!HasCheckedConnection || !IsServerConnected)
+        {
+            LiveMatch.SetServerAvailability(
+                false,
+                !HasCheckedConnection
+                    ? "먼저 Check를 눌러 Server 연결을 확인해주세요."
+                    : "Server에 연결되어 있지 않습니다.");
 
+            return;
+        }
+
+        LiveMatch.SetServerAvailability(true);
+
+        _ = RefreshLiveMatchAfterNavigationAsync();
     }
 
     private async Task RefreshLiveMatchAfterNavigationAsync()
@@ -277,6 +296,12 @@ public partial class MainViewModel : ObservableValidator
 
         ConnectionStatus =
             connected ? "Connected" : "Disconnected";
+
+        LiveMatch.SetServerAvailability(
+            connected,
+            connected
+                ? null
+                : "Server 연결이 끊어졌습니다. 연결 상태를 확인해주세요.");
 
         if (!connectionChanged)
         {

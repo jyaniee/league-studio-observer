@@ -26,6 +26,10 @@ public partial class LiveMatchViewModel : ObservableObject
     private bool isLoading;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+    private bool canRequestServer;
+
+    [ObservableProperty]
     private string statusMessage =
         "Live Match를 조회해주세요.";
 
@@ -72,6 +76,30 @@ public partial class LiveMatchViewModel : ObservableObject
 
     private bool CanRefresh()
     {
-        return !IsLoading;
+        return !IsLoading && CanRequestServer;
+    }
+
+    public void SetServerAvailability(bool available, string? unavailableMessage = null)
+    {
+        bool availabilityChanged =
+            CanRequestServer != available;
+
+        CanRequestServer = available;
+
+        if (available)
+        {
+            if (availabilityChanged)
+            {
+                StatusMessage =
+                    "Server에 연결되었습니다. Refresh를 눌러 현재 경기 정보를 확인해주세요.";
+            }
+
+            return;
+        }
+
+        CurrentState = null;
+        HasMatch = false;
+
+        StatusMessage = unavailableMessage ?? "Server에 연결되어 있지 않습니다.";
     }
 }
