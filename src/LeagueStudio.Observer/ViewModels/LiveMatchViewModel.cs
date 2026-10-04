@@ -20,14 +20,17 @@ public partial class LiveMatchViewModel : ObservableObject
     private ObserverState? currentState;
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ResetMatchCommand))]
     private bool hasMatch;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ResetMatchCommand))]
     private bool isLoading;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RefreshCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ResetMatchCommand))]
     private bool canRequestServer;
 
     [ObservableProperty]
@@ -88,6 +91,48 @@ public partial class LiveMatchViewModel : ObservableObject
         {
             IsLoading = false;
         }
+    }
+
+
+    [RelayCommand(CanExecute = nameof(CanResetMatch))]
+    private async Task ResetMatchAsync()
+    {
+        IsLoading = true;
+        StatusMessage = "현재 경기 정보를 초기화하는 중입니다.";
+
+        try
+        {
+            await _observerApiClient.ResetObserverStateAsync();
+
+            CurrentState = null;
+            HasMatch = false;
+
+            StatusMessage = "현재 경기 정보가 초기화되었습니다.";
+        }
+        catch (HttpRequestException)
+        {
+            StatusMessage =
+                "Server에 연결할 수 없습니다. 경기 정보를 초기화하지 못했습니다.";
+        }
+        catch(TaskCanceledException)
+        {
+            StatusMessage =
+                "Server 응답 시간이 초과되었습니다.";
+        }
+        catch (Exception)
+        {
+            StatusMessage =
+                "현재 경기 정보를 초기화하는 중 오류가 발생했습니다.";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private bool CanResetMatch()
+    {
+        return CanRequestServer && HasMatch && !IsLoading; // Check 전, Connect+경기없음, Refresh/Reset 처리 중 일때는 비활성화 | Connect이면서 경기있을때만 활성화
     }
 
     private bool CanRefresh()
