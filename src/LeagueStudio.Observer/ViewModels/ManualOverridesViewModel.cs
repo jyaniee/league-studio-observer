@@ -52,6 +52,12 @@ public partial class ManualOverridesViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(ApplyNextDragonCommand))]
     [NotifyCanExecuteChangedFor(nameof(ApplyBlueGoldCommand))]
     [NotifyCanExecuteChangedFor(nameof(ApplyRedGoldCommand))]
+    private bool hasCurrentMatch;
+
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(ApplyNextDragonCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ApplyBlueGoldCommand))]
+    [NotifyCanExecuteChangedFor(nameof(ApplyRedGoldCommand))]
     private bool isLoading;
 
     public void SetServerAvailability(bool available)
@@ -62,6 +68,8 @@ public partial class ManualOverridesViewModel : ObservableObject
 
         if (!available)
         {
+            HasCurrentMatch = false;
+
             StatusMessage =
                 "Server 연결이 필요합니다.";
 
@@ -85,8 +93,10 @@ public partial class ManualOverridesViewModel : ObservableObject
             var context =
                 await GetCurrentMatchContextAsync();
 
-            if(context is null)
+            if (context is null)
             {
+                HasCurrentMatch = false;
+
                 StatusMessage =
                     "현재 등록된 경기 정보가 없습니다.";
 
@@ -140,6 +150,8 @@ public partial class ManualOverridesViewModel : ObservableObject
 
             if (context is null)
             {
+                HasCurrentMatch = false;
+
                 StatusMessage =
                     "현재 등록된 경기 정보가 없습니다.";
 
@@ -194,6 +206,8 @@ public partial class ManualOverridesViewModel : ObservableObject
 
             if (context is null)
             {
+                HasCurrentMatch = false;
+
                 StatusMessage =
                     "현재 등록된 경기 정보가 없습니다.";
 
@@ -217,7 +231,7 @@ public partial class ManualOverridesViewModel : ObservableObject
             StatusMessage =
                 "Server에 연결할 수 없습니다.";
         }
-        catch(TaskCanceledException)
+        catch (TaskCanceledException)
         {
             StatusMessage =
                 "Server 응답 시간이 초과되었습니다.";
@@ -235,30 +249,78 @@ public partial class ManualOverridesViewModel : ObservableObject
 
     private bool CanApplyNextDragon()
     {
-        return CanRequestServer && !IsLoading && SelectedDragon is not DragonType.Unknown and not DragonType.Elder;
+        return CanRequestServer && HasCurrentMatch && !IsLoading && SelectedDragon is not DragonType.Unknown and not DragonType.Elder;
     }
 
     private bool CanApplyBlueGold()
     {
-        return CanRequestServer && !IsLoading && BlueGold is >= 0;
+        return CanRequestServer && HasCurrentMatch && !IsLoading && BlueGold is >= 0;
     }
 
     private bool CanApplyRedGold()
     {
-        return CanRequestServer && !IsLoading && RedGold is >= 0;
+        return CanRequestServer && HasCurrentMatch && !IsLoading && RedGold is >= 0;
+    }
+
+    public async Task RefreshMatchAvailabilityAsync()
+    {
+        if (!CanRequestServer)
+        {
+            HasCurrentMatch = false;
+            StatusMessage = "Server 연결이 필요합니다.";
+            return;
+        }
+
+        IsLoading = true;
+        StatusMessage = "현재 경기 정보를 확인하는 중입니다.";
+
+        try
+        {
+            var context =
+                await GetCurrentMatchContextAsync();
+
+            HasCurrentMatch = context is not null;
+
+            StatusMessage =
+                HasCurrentMatch
+                    ? "수동으로 보정할 값을 입력해주세요."
+                    : "현재 등록된 경기 정보가 없습니다.";
+        }
+        catch (HttpRequestException)
+        {
+            HasCurrentMatch = false;
+            StatusMessage =
+                "Server에 연결할 수 없습니다.";
+        }
+        catch (TaskCanceledException)
+        {
+            HasCurrentMatch = false;
+            StatusMessage =
+                "Server 응답 시간이 초과되었습니다.";
+        }
+        catch (Exception)
+        {
+            HasCurrentMatch = false;
+            StatusMessage =
+                "현재 경기 정보를 확인하는 중 오류가 발생했습니다.";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     private async Task<(string MatchId, string ObserverId)?> // Tuple 
         GetCurrentMatchContextAsync()
     {
         var response =
-            await _observerApiClient.GetObserverStateAsync();
+            await _observerApiClient.GetObserverStateAsync(); // => GET /observer/state
 
         if (response is null ||
             !response.Ok ||
             response.State is null ||
             string.IsNullOrWhiteSpace(response.State.MatchId) ||
-            string.IsNullOrWhiteSpace(response.State.ObserverId))
+            string.IsNullOrWhiteSpace(response.State.ObserverId)) // Match ID + Observer ID 있음?
         {
             return null;
         }
