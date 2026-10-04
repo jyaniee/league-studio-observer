@@ -524,15 +524,16 @@
                                     Background="Transparent"
                                     BorderThickness="0"
                                     Focusable="False"
+                                    ClickMode="Press"
                                     IsChecked="{Binding IsDropDownOpen,
-                                        RelativeSource={RelativeSource TemplatedParent},
+                                        RelativeSource={RelativeSource AncestorType={x:Type ComboBox}},
                                         Mode=TwoWay}">
 
                                     <ToggleButton.Template>
 
                                         <ControlTemplate TargetType="ToggleButton">
 
-                                            <Grid>
+                                            <Grid Background="Transparent">
 
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
