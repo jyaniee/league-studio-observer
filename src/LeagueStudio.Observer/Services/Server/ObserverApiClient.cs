@@ -60,6 +60,19 @@ public sealed class ObserverApiClient : IObserverApiClient
         return await response.Content.ReadFromJsonAsync<ObserverStateResponse>(
             cancellationToken: cancellationToken);
     }
+
+    public async Task ResetObserverStateAsync(
+        CancellationToken cancellationToken = default)
+    {
+        using var response =
+            await _httpClient.PostAsync(
+                "/observer/reset",
+                content: null,
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
     public async Task SendNextDragonAsync(
         string matchId,
         string observerId,

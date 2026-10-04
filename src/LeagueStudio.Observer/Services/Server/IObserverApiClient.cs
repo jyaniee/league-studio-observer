@@ -10,6 +10,9 @@ public interface IObserverApiClient
     Task<ObserverStateResponse?> GetObserverStateAsync(
         CancellationToken cancellationToken = default);
 
+    Task ResetObserverStateAsync(
+        CancellationToken cancellationToken = default);
+
     // 경기정보 전송
     Task SendMatchInfoAsync(
         ObserverMatchInfoRequest request,
