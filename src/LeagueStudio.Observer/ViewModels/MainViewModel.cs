@@ -6,28 +6,22 @@ using LeagueStudio.Observer.Models;
 using LeagueStudio.Observer.Services.Server;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Threading;
+// using System.ComponentModel;
+
 public partial class MainViewModel : ObservableValidator
 {
     public LiveMatchViewModel LiveMatch { get; }
+    public ManualOverridesViewModel ManualOverrides { get; }
     private readonly IObserverApiClient _observerApiClient;
     private readonly DispatcherTimer _connectionTimer;
-
-    public IReadOnlyList<DragonType> DragonTypes { get; } =
-        [
-            DragonType.Cloud,
-            DragonType.Infernal,
-            DragonType.Mountain,
-            DragonType.Ocean,
-            DragonType.Hextech,
-            DragonType.Chemtech
-        ];
-
 
     public MainViewModel(IObserverApiClient observerApiClient)
     {
         _observerApiClient = observerApiClient;
 
         LiveMatch = new LiveMatchViewModel(observerApiClient);
+
+        ManualOverrides = new ManualOverridesViewModel(observerApiClient);
 
         _connectionTimer = new DispatcherTimer
         {
@@ -56,9 +50,6 @@ public partial class MainViewModel : ObservableValidator
     private string observerId = "observer-01";
 
     [ObservableProperty]
-    private DragonType selectedDragon = DragonType.Unknown;
-
-    [ObservableProperty]
     private string connectionStatus = "Disconnected";
 
     [ObservableProperty]
@@ -76,6 +67,9 @@ public partial class MainViewModel : ObservableValidator
     [ObservableProperty]
     private string pageDescription =
         "경기 시작 전 운영 정보를 설정합니다.";
+
+    [ObservableProperty]
+    private bool isOverridesPage;
 
 
 
@@ -97,11 +91,18 @@ public partial class MainViewModel : ObservableValidator
                 ? "입력한 경기 정보가 Server에 등록됩니다."
                 : "Server에 연결할 수 없습니다. 연결 상태를 확인해주세요.";
 
-        LiveMatch.SetServerAvailability(
+        LiveMatch.SetServerAvailability(    // 연결 상태 Live Match에 전달
             connected,
             connected
                 ? null
                 : "Server에 연결할 수 없습니다. 연결 상태를 확인해주세요.");
+
+        ManualOverrides.SetServerAvailability(connected); // 연결 상태 Overrides에 전달
+
+        if (connected && IsOverridesPage)
+        {
+            _ = RefreshOverridesAfterNavigationAsync(); // Overrides 화면에서 직접 Check를 눌러 연결되더라도 현재 Match를 다시 확인
+        }
 
         if (!_connectionTimer.IsEnabled)
         {
@@ -109,37 +110,13 @@ public partial class MainViewModel : ObservableValidator
         }
     }
 
-    [RelayCommand]
-    private async Task ApplyDragonAsync()
-    {
-        if (SelectedDragon == DragonType.Unknown)
-        {
-            ResultMessage = "드래곤을 선택해주세요.";
-            return;
-        }
-        try
-        {
-            await _observerApiClient.SendNextDragonAsync(
-                MatchId,
-                ObserverId,
-                SelectedDragon,
-                1.0
-                );
-
-            ResultMessage =
-                $"Applied: {SelectedDragon}";
-        }
-        catch (Exception ex)
-        {
-            ResultMessage =
-                $"Failed: {ex.Message}";
-        }
-    }
+  
     [RelayCommand]
     private void ShowMatchSetup()
     {
         IsMatchSetupPage = true;
         IsLiveMatchPage = false;
+        IsOverridesPage = false;
 
         PageTitle = "Match Setup";
         PageDescription =
@@ -151,6 +128,7 @@ public partial class MainViewModel : ObservableValidator
     {
         IsMatchSetupPage = false;
         IsLiveMatchPage = true;
+        IsOverridesPage = false;
 
         PageTitle = "Live Match";
 
@@ -173,11 +151,39 @@ public partial class MainViewModel : ObservableValidator
         _ = RefreshLiveMatchAfterNavigationAsync();
     }
 
+    [RelayCommand]
+    private void ShowOverrides()
+    {
+        IsMatchSetupPage = false;
+        IsLiveMatchPage = false;
+        IsOverridesPage = true;
+
+        PageTitle = "Manual Overrides";
+        PageDescription =
+            "현재 경기 상태를 수동으로 보정합니다.";
+
+        ManualOverrides.SetServerAvailability(HasCheckedConnection && IsServerConnected);
+
+        if (!HasCheckedConnection || !IsServerConnected)
+        {
+            return;
+        }
+
+        _ = RefreshOverridesAfterNavigationAsync();
+    }
+
+    private async Task RefreshOverridesAfterNavigationAsync()
+    {
+        await Task.Yield();
+
+        await ManualOverrides.RefreshMatchAvailabilityAsync();
+    }
+
     private async Task RefreshLiveMatchAfterNavigationAsync()
     {
         await Task.Yield();
 
-        if(LiveMatch.RefreshCommand.CanExecute(null))
+        if (LiveMatch.RefreshCommand.CanExecute(null))
         {
             await LiveMatch.RefreshCommand.ExecuteAsync(null);
         }
@@ -303,9 +309,16 @@ public partial class MainViewModel : ObservableValidator
                 ? null
                 : "Server 연결이 끊어졌습니다. 연결 상태를 확인해주세요.");
 
+        ManualOverrides.SetServerAvailability(connected);
+
         if (!connectionChanged)
         {
             return;
+        }
+
+        if (connected && IsOverridesPage)
+        {
+            _ = RefreshOverridesAfterNavigationAsync(); // 실제 연결 상태가 바뀐 경우에도 GET /observer/state
         }
 
         ResultMessage =

@@ -421,6 +421,250 @@
         </Style>
 
         <!-- ================================================= -->
+        <!-- Manual Overrides ComboBox Item                    -->
+        <!-- ================================================= -->
+        <Style
+            x:Key="ManualOverrideComboBoxItemStyle"
+            TargetType="ComboBoxItem">
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimaryBrush}"/>
+
+            <Setter Property="Background"
+                    Value="Transparent"/>
+
+            <Setter Property="Padding"
+                    Value="10,8"/>
+
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+
+                        <Border
+                    x:Name="ItemBorder"
+                    Background="{TemplateBinding Background}"
+                    Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter
+                        VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsHighlighted"
+                             Value="True">
+                                <Setter
+                            TargetName="ItemBorder"
+                            Property="Background"
+                            Value="{StaticResource SurfaceSecondaryBrush}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected"
+                             Value="True">
+                                <Setter
+                            TargetName="ItemBorder"
+                            Property="Background"
+                            Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <!-- ================================================= -->
+        <!-- Manual Overrides ComboBox                         -->
+        <!-- ================================================= -->
+        <Style
+            x:Key="ManualOverrideComboBoxStyle"
+            TargetType="ComboBox">
+
+            <Setter Property="Height"
+                    Value="34"/>
+
+            <Setter Property="Foreground"
+                    Value="{StaticResource TextPrimaryBrush}"/>
+
+            <Setter Property="Background"
+                    Value="{StaticResource SurfaceSecondaryBrush}"/>
+
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource BorderBrush}"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="ItemContainerStyle"
+                    Value="{StaticResource ManualOverrideComboBoxItemStyle}"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBox">
+
+                        <Grid>
+
+                            <!-- Closed ComboBox -->
+                            <Border
+                                x:Name="MainBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+
+                                <ToggleButton
+                                    Content="{TemplateBinding SelectionBoxItem}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Focusable="False"
+                                    ClickMode="Press"
+                                    IsChecked="{Binding IsDropDownOpen,
+                                        RelativeSource={RelativeSource AncestorType={x:Type ComboBox}},
+                                        Mode=TwoWay}">
+
+                                    <ToggleButton.Template>
+
+                                        <ControlTemplate TargetType="ToggleButton">
+
+                                            <Grid Background="Transparent">
+
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="32"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <ContentPresenter
+                                                    Content="{TemplateBinding Content}"
+                                                    Margin="10,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Left"
+                                                    TextElement.Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                                                <!-- Placeholder -->
+                                                <TextBlock
+                                                    x:Name="Placeholder"
+                                                    Text="Select dragon..."
+                                                    Margin="10,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{StaticResource TextMutedBrush}"
+                                                    Visibility="Collapsed"/>
+
+                                                <!-- Arrow -->
+                                                <Path
+                                                    Grid.Column="1"
+                                                    Width="8"
+                                                    Height="5"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Stroke="{StaticResource TextSecondaryBrush}"
+                                                    StrokeThickness="1.5"
+                                                    StrokeStartLineCap="Round"
+                                                    StrokeEndLineCap="Round"
+                                                    StrokeLineJoin="Round"
+                                                    Data="M 0 0 L 4 4 L 8 0"/>
+
+                                            </Grid>
+
+                                            <ControlTemplate.Triggers>
+
+                                                <DataTrigger
+                                                    Binding="{Binding SelectedIndex,
+                                                        RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                    Value="-1">
+
+                                                    <Setter
+                                                        TargetName="Placeholder"
+                                                        Property="Visibility"
+                                                        Value="Visible"/>
+
+                                                </DataTrigger>
+
+                                            </ControlTemplate.Triggers>
+
+                                        </ControlTemplate>
+
+                                    </ToggleButton.Template>
+
+                                </ToggleButton>
+
+                            </Border>
+
+
+                            <!-- Drop-down -->
+                            <Popup
+                                x:Name="PART_Popup"
+                                Placement="Bottom"
+                                AllowsTransparency="True"
+                                IsOpen="{TemplateBinding IsDropDownOpen}"
+                                Focusable="False"
+                                PopupAnimation="Fade">
+
+                                <Border
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="240"
+                                    Margin="0,4,0,0"
+                                    Background="{StaticResource SurfaceBrush}"
+                                    BorderBrush="{StaticResource BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="6">
+
+                                    <ScrollViewer
+                                        VerticalScrollBarVisibility="Auto"
+                                        HorizontalScrollBarVisibility="Disabled">
+
+                                        <ItemsPresenter/>
+
+                                    </ScrollViewer>
+
+                                </Border>
+
+                            </Popup>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                    Value="True">
+                                <Setter
+                                    TargetName="MainBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource TextMutedBrush}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsKeyboardFocusWithin"
+                                    Value="True">
+                                <Setter
+                                    TargetName="MainBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                    Value="False">
+                                <Setter
+                                    TargetName="MainBorder"
+                                    Property="Opacity"
+                                    Value="0.45"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <!-- ================================================= -->
         <!-- Navigation Button                                 -->
         <!-- ================================================= -->
 
@@ -675,8 +919,10 @@
 
                     <Button
                         Content="Overrides"
+                        Command="{Binding ShowOverridesCommand}"
                         Style="{StaticResource NavigationButtonStyle}"
-                        Margin="0,4,0,0"/>
+                        Margin="0,4,0,0"
+                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
 
 
                     <TextBlock
@@ -1510,6 +1756,217 @@
                             </Border>
                             
                         </StackPanel>
+
+                    </StackPanel>
+
+                </ScrollViewer>
+
+            </Grid>
+
+            <!-- ================================================= -->
+            <!-- Manual Overrides                                   -->
+            <!-- ================================================= -->
+
+            <Grid
+                Grid.Row="1"
+                Visibility="{Binding IsOverridesPage,
+                    Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                <ScrollViewer
+                    VerticalScrollBarVisibility="Auto"
+                    HorizontalScrollBarVisibility="Disabled"
+                    Background="{StaticResource BackgroundBrush}">
+
+                    <StackPanel
+                        Margin="32"
+                        DataContext="{Binding ManualOverrides}">
+
+                        <!-- Status -->
+
+                        <Border
+                            Background="{StaticResource SurfaceBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="16"
+                            Margin="0,0,0,24">
+
+                            <StackPanel>
+
+                                <TextBlock
+                                    Text="Override Status"
+                                    FontSize="12"
+                                    FontWeight="SemiBold"
+                                    Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                                <TextBlock
+                                    Text="{Binding StatusMessage}"
+                                    FontSize="11"
+                                    Margin="0,4,0,0"
+                                    Foreground="{StaticResource TextSecondaryBrush}"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Next Dragon -->
+
+                        <TextBlock
+                            Text="Objectives"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextPrimaryBrush}"
+                            Margin="0,0,0,10"/>
+
+                        <Border
+                            Background="{StaticResource SurfaceBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="20"
+                            Margin="0,0,0,24">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+
+                                    <TextBlock
+                                        Text="Next Dragon"
+                                        FontSize="12"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource TextPrimaryBrush}"/>
+
+                                    <TextBlock
+                                        Text="다음에 등장할 드래곤 타입을 수동으로 지정합니다."
+                                        FontSize="11"
+                                        Margin="0,3,0,10"
+                                        Foreground="{StaticResource TextMutedBrush}"/>
+
+                                    <ComboBox
+                                        ItemsSource="{Binding DragonTypes}"
+                                        SelectedItem="{Binding SelectedDragon}"
+                                        Style="{StaticResource ManualOverrideComboBoxStyle}"/>
+
+                                </StackPanel>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Content="Apply"
+                                    Command="{Binding ApplyNextDragonCommand}"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    MinWidth="100"
+                                    VerticalAlignment="Bottom"/>
+
+                            </Grid>
+
+                        </Border>
+
+
+                        <!-- Team Gold -->
+
+                        <TextBlock
+                            Text="Team Gold"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource TextPrimaryBrush}"
+                            Margin="0,0,0,10"/>
+
+                        <Grid>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <!-- Blue -->
+
+                            <Border
+                                Grid.Column="0"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource BlueTeamBrush}"
+                                BorderThickness="2,1,1,1"
+                                CornerRadius="8"
+                                Padding="20">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                        Text="BLUE TEAM"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource BlueTeamBrush}"
+                                        Margin="0,0,0,16"/>
+
+                                    <TextBlock
+                                        Text="Global Gold"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding BlueGold,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                                        Margin="0,0,0,14"/>
+
+                                    <Button
+                                        Content="Apply Blue Gold"
+                                        Command="{Binding ApplyBlueGoldCommand}"
+                                        Style="{StaticResource PrimaryButtonStyle}"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+
+                            <!-- Red -->
+
+                            <Border
+                                Grid.Column="2"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource RedTeamBrush}"
+                                BorderThickness="2,1,1,1"
+                                CornerRadius="8"
+                                Padding="20">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                        Text="RED TEAM"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Foreground="{StaticResource RedTeamBrush}"
+                                        Margin="0,0,0,16"/>
+
+                                    <TextBlock
+                                        Text="Global Gold"
+                                        FontSize="12"
+                                        Foreground="{StaticResource TextSecondaryBrush}"
+                                        Margin="0,0,0,6"/>
+
+                                    <TextBox
+                                        Text="{Binding RedGold,
+                                            UpdateSourceTrigger=PropertyChanged}"
+                                        Margin="0,0,0,14"/>
+
+                                    <Button
+                                        Content="Apply Red Gold"
+                                        Command="{Binding ApplyRedGoldCommand}"
+                                        Style="{StaticResource PrimaryButtonStyle}"/>
+
+                                </StackPanel>
+
+                            </Border>
+
+                        </Grid>
 
                     </StackPanel>
 
