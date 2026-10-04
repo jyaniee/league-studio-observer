@@ -26,4 +26,12 @@ public interface IObserverApiClient
         double confidence,
         CancellationToken cancellationToken = default);
 
+    Task SendTeamGoldAsync(
+        string matchId,
+        string observerId,
+        TeamSide side,
+        double globalGold,
+        double confidence,
+        CancellationToken cancellationToken = default);
+
 }

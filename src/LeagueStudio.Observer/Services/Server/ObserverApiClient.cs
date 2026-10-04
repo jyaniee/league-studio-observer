@@ -96,15 +96,79 @@ public sealed class ObserverApiClient : IObserverApiClient
             SentAt: now,
             ObservedAt: now,
             Patch: new ObserverStatePatch(
-                new ObserverObjectivesPatch(
-                    new ObserverDragonPatch(
-                        dragonType.ToApiValue()
+                Objectives: new ObserverObjectivesPatch(
+                    Dragon: new ObserverDragonPatch(
+                        NextDragonType: dragonType.ToApiValue()
                     )
                 )
             ),
             Confidence: new Dictionary<string, double>
             {
                 ["objectives.dragon.nextDragonType"] = confidence
+            }
+        );
+
+        using var response =
+            await _httpClient.PostAsJsonAsync(
+                "/observer/state-patch",
+                payload,
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task SendTeamGoldAsync(
+        string matchId,
+        string observerId,
+        TeamSide side,
+        double globalGold,
+        double confidence,
+        CancellationToken cancellationToken = default)
+    {
+        if (globalGold < 0)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(globalGold),
+                "Global gold cannot be negative.");
+        }
+
+        var now = DateTimeOffset.UtcNow.ToString("O");
+
+        ObserverTeamsPatch teamsPatch =
+           side switch
+           {
+               TeamSide.Blue => new ObserverTeamsPatch(
+                   Blue: new ObserverTeamPatch(
+                       GlobalGold: globalGold
+                   )
+               ),
+
+               TeamSide.Red => new ObserverTeamsPatch(
+                   Red: new ObserverTeamPatch(
+                       GlobalGold: globalGold
+                   )
+               ),
+
+               _ => throw new ArgumentOutOfRangeException(
+                   nameof(side),
+                   side,
+                   "Unknown team side.")
+           };
+
+        string confidenceKey =
+            side == TeamSide.Blue ? "teams.blue.globalGold" : "teams.red.globalGold";
+
+        var payload = new ObserverStatePatchPayload(
+            MatchId: matchId,
+            ObserverId: observerId,
+            SentAt: now,
+            ObservedAt: now,
+            Patch: new ObserverStatePatch(
+                Teams: teamsPatch
+            ),
+            Confidence: new Dictionary<string, double>
+            {
+                [confidenceKey] = confidence
             }
         );
 

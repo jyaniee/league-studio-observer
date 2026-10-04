@@ -10,13 +10,23 @@ public sealed record ObserverStatePatchPayload(
 );
 
 public sealed record ObserverStatePatch(
-    ObserverObjectivesPatch Objectives
+    ObserverTeamsPatch? Teams = null,
+    ObserverObjectivesPatch? Objectives = null
+);
+
+public sealed record ObserverTeamsPatch(
+    ObserverTeamPatch? Blue = null,
+    ObserverTeamPatch? Red = null
+);
+
+public sealed record ObserverTeamPatch(
+    double? GlobalGold = null
 );
 
 public sealed record ObserverObjectivesPatch(
-    ObserverDragonPatch Dragon
+    ObserverDragonPatch? Dragon = null
 );
 
 public sealed record ObserverDragonPatch(
-    string NextDragonType
+    string? NextDragonType = null
 );
