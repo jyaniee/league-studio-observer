@@ -583,8 +583,7 @@
                     <Button
                         Content="Overrides"
                         Style="{StaticResource NavigationButtonStyle}"
-                        Margin="0,4,0,0"
-                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
+                        Margin="0,4,0,0"/>
 
 
                     <TextBlock
@@ -597,8 +596,7 @@
 
                     <Button
                         Content="Settings"
-                        Style="{StaticResource NavigationButtonStyle}"
-                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
+                        Style="{StaticResource NavigationButtonStyle}"/>
 
                 </StackPanel>
 
