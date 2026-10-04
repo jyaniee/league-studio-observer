@@ -8,7 +8,7 @@ public sealed class ObserverStateResponse
 {
     public bool Ok { get; set; }
 
-    public ObserverState State { get; set; } = new();
+    public ObserverState? State { get; set; }
 }
 
 public sealed class ObserverState

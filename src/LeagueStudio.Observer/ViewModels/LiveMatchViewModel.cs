@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LeagueStudio.Observer.Models;
 using LeagueStudio.Observer.Services.Server;
+using System.Net.Http;
 
 public partial class LiveMatchViewModel : ObservableObject
 {
@@ -46,6 +47,7 @@ public partial class LiveMatchViewModel : ObservableObject
 
             if (response is null ||
                 !response.Ok ||
+                response.State is null ||
                 string.IsNullOrWhiteSpace(response.State.MatchId))
             {
                 CurrentState = null;
@@ -61,12 +63,26 @@ public partial class LiveMatchViewModel : ObservableObject
             StatusMessage =
                 "현재 경기 정보를 불러왔습니다.";
         }
+        catch (HttpRequestException)
+        {
+            CurrentState = null;
+            HasMatch = false;
+            StatusMessage =
+                "서버에 연결할 수 없습니다. 연결 상태를 확인해주세요.";
+        }
+        catch (TaskCanceledException)
+        {
+            CurrentState = null;
+            HasMatch = false;
+            StatusMessage =
+                "Server 응답 시간이 초과되었습니다.";
+        }
         catch (Exception)
         {
             CurrentState = null;
             HasMatch = false;
             StatusMessage =
-                "Server에 연결되어 있지 않습니다.";
+                "현재 경기 정보를 불러오는 중 오류가 발생했습니다.";
         }
         finally
         {
