@@ -59,49 +59,4 @@ public partial class MainWindow : Window
         selectedButton.Background =
             (Brush)FindResource("PrimaryMutedBrush");
     }
-    private void MainScrollViewer_ScrollChanged(
-        object sender,
-        ScrollChangedEventArgs e)
-    {
-        if (ScrollHint is null)
-        {
-            return;
-        }
-
-        bool canScroll =
-            MainScrollViewer.ScrollableHeight > 0;
-
-        bool isAtBottom =
-            MainScrollViewer.VerticalOffset
-            >= MainScrollViewer.ScrollableHeight - 1;
-
-        ScrollHint.Visibility =
-            canScroll && !isAtBottom
-                ? Visibility.Visible
-                : Visibility.Collapsed;
-    }
-    private async void ResetMatchButton_Click(
-    object sender,
-    RoutedEventArgs e)
-    {
-        var result = MessageBox.Show(
-            "현재 경기 정보와 Observer Override를 모두 초기화합니다.\n" +
-            "이 작업은 되돌릴 수 없습니다.\n\n" +
-            "계속하시겠습니까?",
-            "Reset Match",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
-
-        if (result != MessageBoxResult.Yes)
-        {
-            return;
-        }
-
-        if (sender is Button button &&
-            button.DataContext is LiveMatchViewModel viewModel &&
-            viewModel.ResetMatchCommand.CanExecute(null))
-        {
-            await viewModel.ResetMatchCommand.ExecuteAsync(null);
-        }
-    }
 }
