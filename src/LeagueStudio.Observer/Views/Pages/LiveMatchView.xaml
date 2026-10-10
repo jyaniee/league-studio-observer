@@ -1,4 +1,4 @@
-<UserControl x:Class="LeagueStudio.Observer.Views.LiveMatchView"
+<UserControl x:Class="LeagueStudio.Observer.Views.Pages.LiveMatchView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
