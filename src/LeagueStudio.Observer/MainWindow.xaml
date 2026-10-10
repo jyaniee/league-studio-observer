@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:pages="clr-namespace:LeagueStudio.Observer.Views.Pages"
+        xmlns:shared="clr-namespace:LeagueStudio.Observer.Views.Shared"
 
         Title="League Studio Observer"
 
@@ -39,113 +40,8 @@
         <!-- Sidebar                                           -->
         <!-- ================================================= -->
 
-        <Border
-            Grid.Column="0"
-            Background="{StaticResource SidebarBrush}"
-            BorderBrush="{StaticResource BorderBrush}"
-            BorderThickness="0,0,1,0">
-
-            <Grid Margin="16">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="32"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-
-                <!-- Logo / App Name -->
-
-                <StackPanel Grid.Row="0">
-
-                    <TextBlock
-                        Text="LEAGUE STUDIO"
-                        FontSize="17"
-                        FontWeight="Bold"
-                        Foreground="{StaticResource PrimaryBrush}"/>
-
-                    <TextBlock
-                        Text="Observer Tool"
-                        FontSize="12"
-                        Margin="0,4,0,0"
-                        Foreground="{StaticResource TextSecondaryBrush}"/>
-
-                </StackPanel>
-
-
-                <!-- Navigation -->
-
-                <StackPanel x:Name="NavigationMenu" Grid.Row="2" >
-
-                    <TextBlock
-                        Text="OPERATION"
-                        FontSize="10"
-                        FontWeight="SemiBold"
-                        Foreground="{StaticResource TextMutedBrush}"
-                        Margin="12,0,0,8"/>
-
-
-                    <!-- Active page -->
-
-                    <Button
-                        Content="Match Setup"
-                        Command="{Binding ShowMatchSetupCommand}"
-                        Style="{StaticResource NavigationButtonStyle}"
-                        Foreground="{StaticResource PrimaryBrush}"
-                        Background="{StaticResource PrimaryMutedBrush}"
-                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
-
-
-                    <Button
-                        Content="Live Match"
-                        Command="{Binding ShowLiveMatchCommand}"
-                        Style="{StaticResource NavigationButtonStyle}"
-                        Margin="0,4,0,0"
-                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
-
-                    <Button
-                        Content="Overrides"
-                        Command="{Binding ShowOverridesCommand}"
-                        Style="{StaticResource NavigationButtonStyle}"
-                        Margin="0,4,0,0"
-                        PreviewMouseLeftButtonDown="NavigationButton_PreviewMouseLeftButtonDown"/>
-
-
-                    <TextBlock
-                        Text="SYSTEM"
-                        FontSize="10"
-                        FontWeight="SemiBold"
-                        Foreground="{StaticResource TextMutedBrush}"
-                        Margin="12,28,0,8"
-                        />
-
-                    <Button
-                        Content="Settings"
-                        Style="{StaticResource NavigationButtonStyle}"/>
-
-                </StackPanel>
-
-
-                <!-- Version -->
-
-                <StackPanel Grid.Row="3">
-
-                    <Border
-                        Height="1"
-                        Background="{StaticResource BorderBrush}"
-                        Margin="0,0,0,14"/>
-
-                    <TextBlock
-                        Text="League Studio Observer"
-                        FontSize="11"
-                        Foreground="{StaticResource TextMutedBrush}"/>
-
-                </StackPanel>
-
-            </Grid>
-
-        </Border>
+        <shared:SidebarView
+             Grid.Column="0"/>
 
 
         <!-- ================================================= -->

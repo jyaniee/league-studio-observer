@@ -34,29 +34,4 @@ public partial class MainWindow : Window
     {
         Close();
     }
-    private void NavigationButton_PreviewMouseLeftButtonDown(
-    object sender,
-    MouseButtonEventArgs e)
-    {
-        foreach (var child in NavigationMenu.Children)
-        {
-            if (child is not Button button)
-            {
-                continue;
-            }
-
-            button.Foreground =
-                (Brush)FindResource("TextSecondaryBrush");
-
-            button.Background = Brushes.Transparent;
-        }
-
-        var selectedButton = (Button)sender;
-
-        selectedButton.Foreground =
-            (Brush)FindResource("PrimaryBrush");
-
-        selectedButton.Background =
-            (Brush)FindResource("PrimaryMutedBrush");
-    }
 }
