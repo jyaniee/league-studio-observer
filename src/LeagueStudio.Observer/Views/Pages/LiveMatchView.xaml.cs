@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using LeagueStudio.Observer.ViewModels;
 
-namespace LeagueStudio.Observer.Views;
+namespace LeagueStudio.Observer.Views.Pages;
 
 public partial class LiveMatchView : UserControl
 {
