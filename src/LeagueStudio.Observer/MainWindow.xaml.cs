@@ -17,46 +17,4 @@ public partial class MainWindow : Window
 
         DataContext = new MainViewModel(apiClient);
     }
-
-    private void Header_MouseLeftButtonDown(
-        object sender,
-        MouseButtonEventArgs e)
-    {
-        if (e.LeftButton == MouseButtonState.Pressed)
-        {
-            DragMove();
-        }
-    }
-    
-    private void CloseButton_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        Close();
-    }
-    private void NavigationButton_PreviewMouseLeftButtonDown(
-    object sender,
-    MouseButtonEventArgs e)
-    {
-        foreach (var child in NavigationMenu.Children)
-        {
-            if (child is not Button button)
-            {
-                continue;
-            }
-
-            button.Foreground =
-                (Brush)FindResource("TextSecondaryBrush");
-
-            button.Background = Brushes.Transparent;
-        }
-
-        var selectedButton = (Button)sender;
-
-        selectedButton.Foreground =
-            (Brush)FindResource("PrimaryBrush");
-
-        selectedButton.Background =
-            (Brush)FindResource("PrimaryMutedBrush");
-    }
 }
